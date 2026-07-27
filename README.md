@@ -10,6 +10,7 @@ The System comprises of 2 parts
 
 ## Project Structure
 PCMS/
+
 |--- PCMS-Angular/
 
 |    V---- PCMS‑FrontEnd/
