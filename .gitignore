@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/PCMS-Backend/PCMS-Backend/.vs
+/PCMS-Backend/PCMS-Backend/bin/Debug/net8.0
+/PCMS-Backend/PCMS-Backend/obj
+/PCMS-Backend/PCMS-Backend/PCMS-Backend.csproj.user
+

@@ -1,0 +1,55 @@
+<h3>New Category</h3>
+<form (ngSubmit)="createCategory(categoryForm)" #categoryForm="ngForm">
+  <input 
+    type="text" 
+    [(ngModel)]="newCategory.name" 
+    name="name" 
+    placeholder="Name" 
+    required 
+    #name="ngModel"
+  />
+  @if (name.invalid && name.touched) {
+    <span style="color:red">Name is required</span>
+  }
+
+  <input 
+    type="text" 
+    [(ngModel)]="newCategory.description" 
+    name="description" 
+    placeholder="Description" 
+    required 
+    #description="ngModel"
+  />
+  @if (description.invalid && description.touched) {
+    <span style="color:red">Description is required</span>
+  }
+
+ <select [(ngModel)]="newCategory.parentCategoryId" name="parentCategoryId">
+  <option [ngValue]="-99">No parent</option>
+  @for (cat of categories; track cat.id) {
+    <option [ngValue]="cat.id">{{ cat.name }}</option>
+  }
+</select>
+
+  <button type="submit" [disabled]="categoryForm.invalid">Create Category</button>
+</form>
+
+@if (errorMessage) {
+  <p style="color:red">{{ errorMessage }}</p>
+}
+
+<hr>
+
+<h3>List of Categories</h3>
+<ul>
+  @for (parent of categories; track parent.id) {
+    <li>
+      <strong>{{ parent.name }}</strong>
+      <ul>
+        @for (child of parent.subCategories; track child.id) {
+          <li>{{ child.name }}</li>
+        }
+      </ul>
+    </li>
+  }
+</ul>

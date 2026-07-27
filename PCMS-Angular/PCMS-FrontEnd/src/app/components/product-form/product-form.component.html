@@ -1,0 +1,39 @@
+<div class="form-container">
+  <h2>{{ isEdit ? 'Edit Product' : 'Add Product' }}</h2>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Name</label>
+        <input formControlName="name" />
+      </div>
+
+      <div class="form-field">
+        <label>SKU</label>
+        <input formControlName="sku" />
+      </div>
+
+      <div class="form-field">
+        <label>Price</label>
+        <input type="number" formControlName="price" />
+      </div>
+
+      <div class="form-field">
+        <label>Quantity</label>
+        <input type="number" formControlName="quantity" />
+      </div>
+
+      <select formControlName="categoryId" name="category">
+        @for (cat of categories; track cat.id) {
+        <option [value]="cat.id">
+          {{ cat.name }}
+        </option>
+        }
+      </select>
+    </div>
+
+    <button type="submit" [disabled]="productForm.invalid">
+      {{ isEdit ? 'Update' : 'Create' }}
+    </button>
+  </form>
+</div>

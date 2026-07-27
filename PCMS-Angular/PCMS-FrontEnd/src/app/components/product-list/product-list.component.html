@@ -1,0 +1,58 @@
+<h2>Product List</h2>
+
+<div class="endpoint-toggle">
+    <label>
+        <input type="radio" name="endpoint" value="default" [(ngModel)]="selectedEndpoint" /> Default</label>
+    <label>
+        <input type="radio" name="endpoint" value="customJson" [(ngModel)]="selectedEndpoint" /> Custom JSON</label>
+    <label>
+        <input type="radio" name="endpoint" value="manualLookup" [(ngModel)]="selectedEndpoint" /> Manual Lookup</label>
+</div>
+
+<app-search-bar (search)="onSearch($event)"></app-search-bar>
+
+<div class="product-actions">
+    <button (click)="goToCreate()">Add Product</button>
+    <button (click)="loadProducts()">Load Products</button>
+</div>
+
+<table class="product-table">
+    <thead>
+        <tr>
+            <th (click)="toggleSort('name')">
+                Name
+                @if (sortBy === 'name') {
+                    <span>{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                }
+            </th>
+            <th (click)="toggleSort('price')">
+                Price
+                @if (sortBy === 'price') {
+                    <span>{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+                }
+            </th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (product of products; track product.id) {
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price | currency:'ZAR' }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>
+                <button (click)="editProduct(product.id)">Edit</button>
+                <button (click)="confirmDelete(product.id)">Delete</button>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<!-- Category Management Section -->
+<section class="category-section">
+    <app-category-filter [categories]="categories" (filter)="onFilter($event)"></app-category-filter>
+</section>
