@@ -19,10 +19,31 @@ public class ProductService
         var products = await _productRepository.GetAllAsync();
         var queryable = products.AsQueryable();
 
+        // Always filter by category and price. Do not apply the simple Contains-based
+        // name/description filter when a name query is provided because fuzzy search
+        // will be used instead. Applying the Contains filter first prevents fuzzy
+        // matches from being considered 
         queryable = queryable
             .FilterByCategory(query.CategoryId)
-            .FilterByPrice(query.MinPrice, query.MaxPrice)
-            .FilterByNameOrDesc(query.Name);
+            .FilterByPrice(query.MinPrice, query.MaxPrice);
+
+        if (!string.IsNullOrWhiteSpace(query.Name))
+        {
+            // Use configured weights for overall scoring
+            var engine = new ProductSearchEngine(
+                SearchWeightConfig.ProductWeights,
+                _productRepository
+            );
+
+            var fuzzyResults = await engine.SearchAsync(query.Name);
+
+            var matchedIds = fuzzyResults
+                .Where(r => r.Score > 0.3)
+                .Select(r => r.Item.Id)
+                .ToHashSet();
+
+            queryable = queryable.Where(p => matchedIds.Contains(p.Id));
+        }
 
         queryable = query.SortBy?.ToLower() switch
         {
